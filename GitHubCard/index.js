@@ -1,9 +1,16 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+axios.get(/*'https://api.github.com/users/kayode94'*/)
+.then(response=>{
+  console.log('This is the response ---->', response.data)
+})
+.catch(error=>{
+  console.log('This is your error ----->', error)
+})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +35,6 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +64,63 @@ const followersArray = [];
     luishrd
     bigknell
 */
+const cardsDiv = document.querySelector('.cards')
+console.log(cardsDiv)
+
+function cardMaker (object){
+   // instantiating the elements
+  const mainCard = document.createElement('div')
+  const imageOfUser = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const usersName = document.createElement('h3')
+  const usersUserName = document.createElement('p')
+  const usersLocation = document.createElement('p')
+  const usersProfile = document.createElement('p')
+  const profileLink = document.createElement('a')
+  const usersFollowerCount = document.createElement('p')
+  const usersFollowingCount = document.createElement('p')
+  const usersBio = document.createElement('p')
+   // setting class names, attributes and text
+  mainCard.classList.add('card')
+  imageOfUser.src = object.avatar_url
+  cardInfo.classList.add('card-info')
+  usersName.classList.add('name')
+  usersUserName.classList.add('username')
+  usersLocation.textContent = `I am from: ${object.location}`
+  usersProfile.textContent = `My Profile: ${object.html_url}`
+  profileLink.textContent = object.html_url
+  usersFollowerCount.textContent = `My Followers: ${object.followers}`
+  usersFollowingCount.textContent = `How Many People I Follow: ${object.following}`
+  usersBio.textContent = `My Bio: ${object.bio}`
+  // creating the hierarchy
+  mainCard.appendChild(imageOfUser)
+  mainCard.appendChild(cardInfo)
+  cardInfo.appendChild(usersName)
+  cardInfo.appendChild(usersLocation)
+  cardInfo.appendChild(usersProfile)
+  usersProfile.appendChild(usersBio)
+  usersProfile.appendChild(usersFollowerCount)
+  usersProfile.appendChild(usersFollowingCount)
+
+  return mainCard
+}
+//Rendering my card
+axios.get('https://api.github.com/users/kayode94')
+.then(response=>{
+  const myData = response.data
+  cardsDiv.appendChild(cardMaker(myData))
+})
+.catch(error=>{
+  console.log('This is your error --->', error)
+})
+
+//Rendering example cards
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+followersArray.forEach(follower=>{
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response=>{
+    const followerData = response.data
+    cardsDiv.appendChild(cardMaker(followerData))
+  })
+})
