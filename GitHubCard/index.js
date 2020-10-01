@@ -1,9 +1,16 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+axios.get(/*'https://api.github.com/users/kayode94'*/)
+.then(response=>{
+  console.log('This is the response ---->', response.data)
+})
+.catch(error=>{
+  console.log('This is your error ----->', error)
+})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -58,3 +65,29 @@ const followersArray = [];
     luishrd
     bigknell
 */
+const cardsDiv = document.querySelector('.cards')
+console.log(cardsDiv)
+
+function cardMaker (object){
+   // instantiating the elements
+  const mainCard = document.createElement('div')
+  const imageOfUser = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const usersName = document.createElement('h3')
+  const usersUserName = document.createElement('p')
+  const usersLocation = document.createElement('p')
+  const profile = document.createElement('p')
+  const profileLink = document.createElement('a')
+  const usersFollowerCount = document.createElement('p')
+  const usersFollowingCount = document.createElement('p')
+  const usersBio = document.createElement('p')
+   // setting class names, attributes and text
+    mainCard.classList.add('card')
+    imageOfUser.src = object.avatar_url
+    cardInfo.classList.add('card-info')
+    usersName.classList.add('name')
+    usersUserName.classList.add('username')
+    usersLocation.textContent = object.location
+    profile.textContent = 'Profile: '
+    profileLink.textContent = object.html_url
+}
