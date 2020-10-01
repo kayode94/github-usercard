@@ -35,7 +35,6 @@ axios.get(/*'https://api.github.com/users/kayode94'*/)
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -76,18 +75,52 @@ function cardMaker (object){
   const usersName = document.createElement('h3')
   const usersUserName = document.createElement('p')
   const usersLocation = document.createElement('p')
-  const profile = document.createElement('p')
+  const usersProfile = document.createElement('p')
   const profileLink = document.createElement('a')
   const usersFollowerCount = document.createElement('p')
   const usersFollowingCount = document.createElement('p')
   const usersBio = document.createElement('p')
    // setting class names, attributes and text
-    mainCard.classList.add('card')
-    imageOfUser.src = object.avatar_url
-    cardInfo.classList.add('card-info')
-    usersName.classList.add('name')
-    usersUserName.classList.add('username')
-    usersLocation.textContent = object.location
-    profile.textContent = 'Profile: '
-    profileLink.textContent = object.html_url
+  mainCard.classList.add('card')
+  imageOfUser.src = object.avatar_url
+  cardInfo.classList.add('card-info')
+  usersName.classList.add('name')
+  usersUserName.classList.add('username')
+  usersLocation.textContent = `I am from: ${object.location}`
+  usersProfile.textContent = `My Profile: ${object.html_url}`
+  profileLink.textContent = object.html_url
+  usersFollowerCount.textContent = `My Followers: ${object.followers}`
+  usersFollowingCount.textContent = `How Many People I Follow: ${object.following}`
+  usersBio.textContent = `My Bio: ${object.bio}`
+  // creating the hierarchy
+  mainCard.appendChild(imageOfUser)
+  mainCard.appendChild(cardInfo)
+  cardInfo.appendChild(usersName)
+  cardInfo.appendChild(usersLocation)
+  cardInfo.appendChild(usersProfile)
+  usersProfile.appendChild(usersBio)
+  usersProfile.appendChild(usersFollowerCount)
+  usersProfile.appendChild(usersFollowingCount)
+
+  return mainCard
 }
+//Rendering my card
+axios.get('https://api.github.com/users/kayode94')
+.then(response=>{
+  const myData = response.data
+  cardsDiv.appendChild(cardMaker(myData))
+})
+.catch(error=>{
+  console.log('This is your error --->', error)
+})
+
+//Rendering example cards
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+followersArray.forEach(follower=>{
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response=>{
+    const followerData = response.data
+    cardsDiv.appendChild(cardMaker(followerData))
+  })
+})
